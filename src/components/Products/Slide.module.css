@@ -1,0 +1,16 @@
+.best-selling-slider .slick-dots {
+    bottom: -30px;
+  }
+  .best-selling-slider .slick-dots li button:before {
+    font-size: 8px;
+  }
+  .best-selling-slider .slick-dots li.slick-active button:before {
+    color: #4F46E5;
+  }
+  .best-selling-slider .slick-slide {
+    padding: 10px;
+  }
+  .best-selling-slider .slick-track {
+    margin-left: 0;
+    margin-right: 0;
+  }

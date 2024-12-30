@@ -1,0 +1,32 @@
+.categories-slider .slick-track {
+    display: flex;
+    gap: 1rem;
+    margin-left: 0;
+  }
+  .categories-slider .slick-slide {
+    height: auto;
+  }
+  .categories-slider .slick-dots {
+    bottom: -2rem;
+  }
+  .categories-slider .slick-dots li button:before {
+    font-size: 8px;
+  }
+  .categories-slider .slick-prev,
+  .categories-slider .slick-next {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .categories-slider .slick-prev {
+    left: -1rem;
+  }
+  .categories-slider .slick-next {
+    right: -1rem;
+  }

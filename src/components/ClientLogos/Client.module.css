@@ -1,0 +1,10 @@
+.clients-slider .slick-track {
+    display: flex;
+    align-items: center;
+}
+.clients-slider .slick-slide {
+    height: auto;
+}
+.clients-slider .slick-slide > div {
+    height: 100%;
+}
