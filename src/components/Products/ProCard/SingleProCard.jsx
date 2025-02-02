@@ -2,8 +2,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Truck, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from '@/redux/slices/cartSlice';
+import { useRouter } from 'next/navigation';
 const ProductCard = ({ 
+  product={},
   name, 
   brand, 
   currentPrice, 
@@ -14,6 +17,38 @@ const ProductCard = ({
 }) => {
   const [showBulkDiscount, setShowBulkDiscount] = useState(false);
   const bulkDiscountRef = useRef(null);
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+    const handleAddToCart = () => {
+        // Calculate prices as numbers to ensure proper calculations
+        const sellingPrice = parseFloat(product.selling_price);
+        const gstPercentage = parseFloat(product.gst_percentage);
+        const gstAmount = (sellingPrice * gstPercentage) / 100;
+        const totalPrice = sellingPrice + gstAmount;
+
+        const cartItem = {
+            id: product.id,
+            name: product.name,
+            slug: product.slug,
+            image: product.images[0].image, // Feature image
+            regular_price: parseFloat(product.regular_price),
+            selling_price: sellingPrice,
+            gst_percentage: gstPercentage,
+            gst_amount: gstAmount,
+            total_price: totalPrice,
+            qnt: 1,
+            stock: product.stock,
+            selectedAttributes: {} // For future use if needed
+        };
+
+        dispatch(addItemToCart(cartItem));
+    };
+  const BuyNow = ()=>{
+    handleAddToCart();
+    router.push('/checkout');
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -143,7 +178,7 @@ const ProductCard = ({
             </div>
 
             {/* Bulk Discount Toggle */}
-            <div 
+            {/* <div 
               className="flex items-center justify-between border rounded-lg p-2 cursor-pointer hover:bg-gray-50"
               onClick={() => setShowBulkDiscount(true)}
             >
@@ -152,16 +187,21 @@ const ProductCard = ({
                 <span>Qty(1)</span>
                 <ChevronDown className="w-4 h-4" />
               </div>
-            </div>
+            </div> */}
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3">
-              <button className="px-4 py-2 border-2 border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 font-medium">
+              <button onClick={handleAddToCart}
+                    disabled={product.stock === 0}
+                    className="px-4 py-2 border-2 border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 font-medium">
                 Add to Cart
               </button>
-              <button className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 font-medium">
+              <button 
+                onClick={BuyNow}
+                disabled={product.stock === 0}
+                className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 font-medium">
                 Buy Now
-              </button>
+              </button> 
             </div>
           </div>
        

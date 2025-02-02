@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ShoppingCartIcon, TruckIcon } from '@heroicons/react/20/solid';
 import CartArea from '../Cart/ShopingCart';
 import Link from 'next/link';
+import UserArea from './UserArea';
 
 const MainNav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -67,9 +68,10 @@ const MainNav = () => {
                             <div className="flex items-center text-white">
                                 <CartArea />
                             </div>
-                            <button className="bg-blue-700 text-white px-6 py-2 rounded hidden md:block">
+                            {/* <button className="bg-blue-700 text-white px-6 py-2 rounded hidden md:block">
                                 Sign up / Login
-                            </button>
+                            </button> */}
+                            <UserArea checkoutpage={false} />
                             <button className="text-white md:hidden" onClick={toggleMenu}>
                                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </button>
