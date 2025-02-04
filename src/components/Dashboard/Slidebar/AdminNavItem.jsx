@@ -18,6 +18,6 @@ import {
     { icon: FileText, label: 'Home Section' , href : 'homesection' },
     { icon: FileText, label: 'Menu' , href : 'menu' },
     { icon: FileText, label: 'Pages' , href : 'customPage' },
-    { icon: TicketPercent, label: 'Ticket' ,  href : '#' },
+    // { icon: TicketPercent, label: 'Ticket' ,  href : '#' },
 
   ];

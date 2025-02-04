@@ -19,7 +19,10 @@ const UserArea = ( {checkoutpage = false}) => {
   // Check authentication status on mount and when token changes
   useEffect(() => {
     console.log('checkoutbtn val -' , checkoutpage)
+    console.log('userinfo val -' , userInfo)
     const token = Cookies.get('token');
+    console.log('userinfo val -' , token)
+
     setIsAuthenticated(!!token);
   }, [userInfo]);
 

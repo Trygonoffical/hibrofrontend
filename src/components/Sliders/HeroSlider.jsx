@@ -5,23 +5,22 @@ import { useEffect } from "react";
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css';
 
+import { useHomeData } from '@/hooks/useHomeData';
 
 
 
-const HeroSlider = ({data=null}) => {
+const HeroSlider = () => {
 
-    const sliders = [
-        {
-            deskt: '/Images/slide01.webp',
-            mob: '/Images/slide01.webp',
-            link: '#'
-        },
-        {
-            deskt: '/Images/slide01.webp',
-            mob: '/Images/slide01.webp',
-            link: '#'
-        },
-    ];
+    const sliders = useHomeData('sliders');
+        if (sliders.loading) {
+            return <div>Loading...</div>;
+        }
+        if (sliders.error) {
+            return <div>Error: {sliders.error}</div>;
+        }
+        // Find the specific page with matching slug
+        const slides = sliders.data || [];
+        
     const responsive = {
         desktop: {
           breakpoint: { max: 3000, min: 1024 },
@@ -59,11 +58,12 @@ const HeroSlider = ({data=null}) => {
             dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
             >
-            {sliders && sliders.map((slider, idx) => (
-              <Link href={slider.link} key={idx}>
+            {slides && slides.map((slider, idx) => (
+              <Link href={slider.link} key={slider.order}>
                   <Image 
-                    src={`${slider.mob}`} 
-                    alt="sliders" 
+                    src={`${slider.mobile_image
+                    }`} 
+                    alt={slider.title} 
                     width={1400}
                     height={445}
                     style={{  width: '100%', height: 'auto' }}
@@ -71,8 +71,8 @@ const HeroSlider = ({data=null}) => {
                     className="md:hidden"
                   />
                   <Image 
-                    src={`${slider.deskt}`} 
-                    alt="sliders" 
+                    src={`${slider.desktop_image}`} 
+                    alt={slider.title} 
                     width={1400}
                     height={445}
                     style={{  width: '100%', height: 'auto' }}

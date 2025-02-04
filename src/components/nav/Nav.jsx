@@ -71,7 +71,7 @@ const MainNav = () => {
                             {/* <button className="bg-blue-700 text-white px-6 py-2 rounded hidden md:block">
                                 Sign up / Login
                             </button> */}
-                            <UserArea checkoutpage={false} />
+                            <UserArea checkoutpage={false} /> 
                             <button className="text-white md:hidden" onClick={toggleMenu}>
                                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </button>

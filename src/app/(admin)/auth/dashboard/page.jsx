@@ -18,7 +18,7 @@ const Dashboard = () => {
                   <Wallet className="w-6 h-6 text-yellow-600" />
                 </div>
                 <div>
-                  <div className="text-sm text-gray-600">Total Income</div>
+                  <div className="text-sm text-gray-600">Total Sales</div>
                   <div className="text-xl font-semibold">₹ 1000.00</div>
                 </div>
               </div>
@@ -30,13 +30,24 @@ const Dashboard = () => {
                   <Wallet className="w-6 h-6 text-yellow-600" />
                 </div>
                 <div>
-                  <div className="text-sm text-gray-600">Current Month Income</div>
-                  <div className="text-xl font-semibold">₹ 1000.00</div>
+                  <div className="text-sm text-gray-600">Total Orders</div>
+                  <div className="text-xl font-semibold">100</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <div className="flex items-center gap-4">
+                <div className="bg-yellow-100 p-2 rounded-full">
+                  <Wallet className="w-6 h-6 text-yellow-600" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Total Orders</div>
+                  <div className="text-xl font-semibold">100</div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-green-600 p-4 rounded-lg shadow-md text-white">
+            {/* <div className="bg-green-600 p-4 rounded-lg shadow-md text-white">
               <div className="text-center">
                 <h3 className="text-lg font-semibold mb-2">My Rank</h3>
                 <div className="text-2xl font-bold mb-2">Executive Marketing</div>
@@ -46,7 +57,9 @@ const Dashboard = () => {
                   <div>Total Team - 24</div>
                 </div>
               </div>
-            </div>
+            </div> */}
+
+
           </div>
       </>
           
