@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { addItemToCart } from '@/redux/slices/cartSlice';
 import { useRouter } from 'next/navigation';
-const ProductCard = ({ 
+const ProductCard2 = ({ 
   product
 }) => {
   const [showBulkDiscount, setShowBulkDiscount] = useState(false);
@@ -108,6 +108,48 @@ const ProductCard = ({
           />
         </div>
         
+        {/* Bulk Discount Overlay */}
+        {showBulkDiscount && (
+          <div 
+            ref={bulkDiscountRef}
+            className="absolute top-0 left-0 right-0 bg-white rounded-lg shadow-lg z-20 "
+            style={{ minHeight: '400px' }}
+          >
+            <div className="h-full flex flex-col">
+              {/* Header */}
+              <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white">
+                <h3 className="text-lg font-semibold">Quantity</h3>
+                <button 
+                  onClick={() => setShowBulkDiscount(false)}
+                  className="p-1 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto" style={{ maxHeight: '400px' }}>
+                {bulkOptions.map((option, index) => (
+                  <div key={index} className="p-4 border-b hover:bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Quantity({option.quantity})</div>
+                        <div className="text-sm text-gray-500">Price per Qty</div>
+                        <div className="font-semibold">₹{option.price.toLocaleString()}</div>
+                        <div className="text-sm text-green-600 bg-green-50 inline-block px-2 py-1 rounded mt-1">
+                          EXTRA {option.discount}
+                        </div>
+                      </div>
+                      <button className="border border-orange-500 text-orange-500 px-4 py-1 rounded hover:bg-orange-50">
+                        ADD
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Product Details */}
         
@@ -163,4 +205,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default ProductCard2;

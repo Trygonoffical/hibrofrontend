@@ -6,6 +6,13 @@ import ProductCard from './ProCard/SingleProCard';
 import './Slide.module.css'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+
+import { useHomeData } from '@/hooks/useHomeData';
+
+
+
+
 // Custom arrow components
 const PrevArrow = ({ onClick }) => (
   <button
@@ -28,53 +35,64 @@ const NextArrow = ({ onClick }) => (
 );
 
 const BestSelling = ({title}) => {
-  const products = [
-    {
-      id: 1,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp"
-    },
-    {
-      id: 2,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp"
-    },
-    {
-      id: 3,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp"
-    },
-    {
-      id: 4,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp"
-    },
-    {
-      id: 5,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp"
-    },
-  ];
+  // const products = [
+  //   {
+  //     id: 1,
+  //     name: "Rodent Trap Box",
+  //     brand: "hibro",
+  //     currentPrice: 30679,
+  //     originalPrice: 63199,
+  //     discount: "51.46% OFF",
+  //     image: "/Product/1.webp"
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Rodent Trap Box",
+  //     brand: "hibro",
+  //     currentPrice: 30679,
+  //     originalPrice: 63199,
+  //     discount: "51.46% OFF",
+  //     image: "/Product/1.webp"
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Rodent Trap Box",
+  //     brand: "hibro",
+  //     currentPrice: 30679,
+  //     originalPrice: 63199,
+  //     discount: "51.46% OFF",
+  //     image: "/Product/1.webp"
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Rodent Trap Box",
+  //     brand: "hibro",
+  //     currentPrice: 30679,
+  //     originalPrice: 63199,
+  //     discount: "51.46% OFF",
+  //     image: "/Product/1.webp"
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Rodent Trap Box",
+  //     brand: "hibro",
+  //     currentPrice: 30679,
+  //     originalPrice: 63199,
+  //     discount: "51.46% OFF",
+  //     image: "/Product/1.webp"
+  //   },
+  // ];
+
+
+  const allproducts = useHomeData('products');
+          if (allproducts.loading) {
+              return <div>Loading...</div>;
+          }
+          if (allproducts.error) {
+              return <div>Error: {allproducts.error}</div>;
+          }
+          // Find the specific page with matching slug
+          const products = allproducts.data || [];
 
   const settings = {
     dots: true,
@@ -124,7 +142,7 @@ const BestSelling = ({title}) => {
         <Slider {...settings} className="best-selling-slider">
           {products.map((product, idx) => (
             <div key={idx} className="px-2 pb-5">
-              <ProductCard {...product} />
+              <ProductCard product={product} />
             </div>
           ))}
         </Slider>

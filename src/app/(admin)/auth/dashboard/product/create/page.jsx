@@ -13,7 +13,6 @@ const ProductForm = () => {
         description: '',
         regular_price: '',
         selling_price: '',
-        bp_value: 0,
         gst_percentage: 0,
         stock: 0,
         is_featured: false,
@@ -185,7 +184,6 @@ const ProductForm = () => {
                 description: '',
                 regular_price: '',
                 selling_price: '',
-                bp_value: 0,
                 gst_percentage: 0,
                 stock: 0,
                 is_featured: false,
@@ -280,17 +278,7 @@ const ProductForm = () => {
                                 step="0.01"
                             />
                         </div>
-                        <div>
-                            <label className="block mb-1">BP Value</label>
-                            <input
-                                type="number"
-                                name="bp_value"
-                                value={formData.bp_value}
-                                onChange={handleChange}
-                                className="w-full p-2 border rounded"
-                                required
-                            />
-                        </div>
+                    
                         <div>
                             <label className="block mb-1">Stock</label>
                             <input
