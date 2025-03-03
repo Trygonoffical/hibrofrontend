@@ -14,6 +14,7 @@ const AdvertisementForm = ({ advertisement, setRefreshKey, onClose }) => {
         title: advertisement?.title || '',
         link: advertisement?.link || '',
         position: advertisement?.position || '',
+        type: advertisement?.type || 'MULTI',
         is_active: advertisement?.is_active ?? true,
         image: null
     });
@@ -50,6 +51,15 @@ const AdvertisementForm = ({ advertisement, setRefreshKey, onClose }) => {
                 toast.success(`Advertisement ${advertisement ? 'updated' : 'created'} successfully`);
                 setRefreshKey(old => old + 1);
                 setIsOpen(false);
+                setFormData({
+                    title: advertisement?.title || '',
+                    link: advertisement?.link || '',
+                    position: advertisement?.position || '',
+                    type: advertisement?.type || 'MULTI',
+                    is_active: advertisement?.is_active ?? true,
+                    image: null
+                })
+                setPreviewUrl(null)
                 if (onClose) onClose();
             } else {
                 const data = await response.json();
@@ -137,8 +147,24 @@ const AdvertisementForm = ({ advertisement, setRefreshKey, onClose }) => {
                                     value={formData.link}
                                     onChange={handleChange}
                                     className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
-                                    />
+                                />
                             </div>
+                            
+                            {/* Advertisement Type */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Type</label>
+                                <select
+                                    name="type"
+                                    value={formData.type}
+                                    onChange={handleChange}
+                                    className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                                >
+                                    <option value="MULTI">Multiple Ads</option>
+                                    <option value="SINGLE">Full Length Ad</option>
+                                    <option value="PRODUCT">Product Page Ad</option>
+                                </select>
+                            </div>
+                            
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Image</label>
                                 <input
@@ -164,8 +190,9 @@ const AdvertisementForm = ({ advertisement, setRefreshKey, onClose }) => {
                                 <label className="block mb-1">Position</label>
                                 <input
                                 type="number"
+                                name="position"
                                 value={formData.position}
-                                onChange={(e) => setFormData({...formData, position: e.target.value})}
+                                onChange={handleChange}
                                 className="w-full p-2 border rounded"
                                 />
                             </div>
@@ -196,4 +223,5 @@ const AdvertisementForm = ({ advertisement, setRefreshKey, onClose }) => {
         </>
     );
 };
-    export default AdvertisementForm;
+    
+export default AdvertisementForm;

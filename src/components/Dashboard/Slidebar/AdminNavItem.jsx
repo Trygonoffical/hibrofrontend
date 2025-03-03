@@ -15,7 +15,7 @@ import {
     { icon: ShoppingCart, label: 'Testimonials' , href : 'testimonial' },
     { icon: FileText, label: 'Advertisements' , href : 'ads' },
     { icon: FileText, label: 'About' , href : 'about' },
-    { icon: FileText, label: 'Home Section' , href : 'homesection' },
+    { icon: FileText, label: 'Quotation' , href : 'quotation' },
     { icon: FileText, label: 'Menu' , href : 'menu' },
     { icon: FileText, label: 'Pages' , href : 'customPage' },
     // { icon: TicketPercent, label: 'Ticket' ,  href : '#' },
