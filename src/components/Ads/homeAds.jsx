@@ -105,22 +105,20 @@ const HomeAds = () => {
             
             const multiData = await multiResponse.json();
             console.log('MULTI ads fetched:', multiData);
-            let multiads = multiData.filter(x => x.type == 'MULTI')
-            let singlads = multiData.filter(x => x.type == 'SINGLE')
-            console.log('MULTI ads fetched filter :', multiads);
-            console.log('singlads ads fetched singlads :', singlads);
+            // console.log('MULTI ads fetched filter :', multiads);
+            // console.log('singlads ads fetched singlads :', singlads);
             setMultipleAds(multiData);
             
             // Then fetch the single full-length ad (SINGLE type)
-            const singleResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/advertisements/?type=SINGLE&is_active=true`);
+            // const singleResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/advertisements/?type=SINGLE&is_active=true`);
             
-            if (!singleResponse.ok) {
-                throw new Error(`Error fetching SINGLE ads: ${singleResponse.status}`);
-            }
+            // if (!singleResponse.ok) {
+            //     throw new Error(`Error fetching SINGLE ads: ${singleResponse.status}`);
+            // }
             
-            const singleData = await singleResponse.json();
-            console.log('SINGLE ads fetched:', singleData);
-            setSingleAd(singleData);
+            // const singleData = await singleResponse.json();
+            // console.log('SINGLE ads fetched:', singleData);
+            // setSingleAd(singleData);
             
         } catch (error) {
             console.error('Error fetching advertisements:', error);
@@ -174,7 +172,7 @@ const HomeAds = () => {
             )}
 
             {/* Single Full-Width Ad Section */}
-            {singleAd.length > 0 && (
+            {/* {singleAd.length > 0 && (
                 <div className="max-w-7xl mx-auto w-full mb-8 px-4">
                     {singleAd.map((ad, idx) => (
                         <Link 
@@ -195,7 +193,7 @@ const HomeAds = () => {
                         </Link>
                     ))}
                 </div>
-            )}
+            )} */}
         </>
     );
 };

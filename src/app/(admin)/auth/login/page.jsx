@@ -30,7 +30,7 @@ const LoginPage = () => {
       });
 
       const data = await response.json();
-
+      console.log('login response -' ,data )
       if (response.ok) {
         setTokens(data.token ,data.refresh )
         // Set cookies
