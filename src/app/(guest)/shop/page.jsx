@@ -1,110 +1,54 @@
-'use client'
+// 'use client'
 
 import React, { useState, useEffect } from 'react';
 import { Star, Search, Filter, X, ShoppingCart } from 'lucide-react';
-import PageHead from '@/components/Pagehead/PageHead';
+// import PageHead from '@/components/Pagehead/PageHead';
+import { useHomeData } from '@/hooks/useHomeData';
 import ProductCard from '@/components/Products/ProCard/SingleProCard';
+import PageHead from '@/components/Pagehead/PageHead';
+// import ProductCard from '@/components/Products/ProductCard';
 
 const ShopPage = () => {
-  // Initial product data
-  const initialProducts = [
-    {
-      id: 1,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Fly Catcher & Killer Machine',
-
-      
-    },
-    {
-      id: 2,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Fly Catcher & Killer Machine',
-
-    },
-    {
-      id: 3,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Fly Catcher & Killer Machine',
-
-    },
-    {
-      id: 4,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Rodent Bait Station' 
-
-    },
-    {
-      id: 5,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Bird Spikes' 
-
-    },
-    {
-      id: 6,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Bird Spikes' 
-
-    },
-    {
-      id: 7,
-      name: "Rodent Trap Box",
-      brand: "hibro",
-      currentPrice: 30679,
-      originalPrice: 63199,
-      price: 1000, oldPrice: 2000, rating: 5,
-      discount: "51.46% OFF",
-      image: "/Product/1.webp",
-      category: 'Bird Spikes' 
-
-    },
-  ];
-
-  const [products] = useState(initialProducts);
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  // All useState hooks at the top
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState([0, 3000]);
+  const [priceRange, setPriceRange] = useState([0, 10000]); // Increased range for actual prices
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState('default');
   const [cart, setCart] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(['All']);
 
-  const categories = ['All', 'Fly Catcher & Killer Machine', 'Bird Spikes', 'Agriculture Sprayers', 'Rodent Bait Station' ,'Insecticide Chemicals', 'Nylon Bird Net','Animal Repellent','Agricultural Hand Sprayers','PVC Strip Curtain'];
+  // Fetch products data
+  const allProducts = useHomeData('products');
+
+  const fetchProducts = async () => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`);
+        const data = await res.json();
+        console.log('cats -- ', data)
+        setProducts(data);
+        setFilteredProducts(data)
+
+        // Extract unique categories from the products
+      const uniqueCategories = new Set(['All']);
+      data.forEach(product => {
+        product.category_details.forEach(category => {
+          uniqueCategories.add(category.name);
+        });
+      });
+      setCategories(Array.from(uniqueCategories));
+    } catch (error) {
+        console.error('Error fetching Products:', error);
+    }
+};
+
+
+  // Update products and categories when data is loaded
+  useEffect(() => {
+    fetchProducts()
+  }, []);
 
   // Filter and search function
   const filterProducts = () => {
@@ -119,21 +63,24 @@ const ShopPage = () => {
 
     // Apply category filter
     if (selectedCategory !== 'All') {
-      result = result.filter(product => product.category === selectedCategory);
+      result = result.filter(product =>
+        product.category_details.some(cat => cat.name === selectedCategory)
+      );
     }
 
-    // Apply price range filter
-    result = result.filter(product =>
-      product.price >= priceRange[0] && product.price <= priceRange[1]
-    );
+    // Apply price range filter using selling_price
+    result = result.filter(product => {
+      const price = parseFloat(product.selling_price);
+      return price >= priceRange[0] && price <= priceRange[1];
+    });
 
     // Apply sorting
     switch (sortBy) {
       case 'price-low-high':
-        result.sort((a, b) => a.price - b.price);
+        result.sort((a, b) => parseFloat(a.selling_price) - parseFloat(b.selling_price));
         break;
       case 'price-high-low':
-        result.sort((a, b) => b.price - a.price);
+        result.sort((a, b) => parseFloat(b.selling_price) - parseFloat(a.selling_price));
         break;
       case 'name-a-z':
         result.sort((a, b) => a.name.localeCompare(b.name));
@@ -151,22 +98,8 @@ const ShopPage = () => {
   // Effect to run filtering when any filter changes
   useEffect(() => {
     filterProducts();
-  }, [searchTerm, selectedCategory, priceRange, sortBy]);
+  }, [searchTerm, selectedCategory, priceRange, sortBy, products]);
 
-  // Add to cart functionality
-  const addToCart = (product) => {
-    setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.id === product.id);
-      if (existingProduct) {
-        return prevCart.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
-  };
 
   // Handle price range change
   const handlePriceRangeChange = (e, type) => {
@@ -184,9 +117,15 @@ const ShopPage = () => {
     filterProducts();
   };
 
+  // Get featured image for a product
+  const getFeatureImage = (product) => {
+    const featuredImage = product.images.find(img => img.is_feature);
+    return featuredImage ? featuredImage.image : product.images[0]?.image;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-    <PageHead title={'Shop Now'} />
+      <PageHead title={'Shop Now'} />
       <div className="max-w-7xl mx-auto px-4 mt-10">
         {/* Header with search */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -242,7 +181,7 @@ const ShopPage = () => {
                   <input
                     type="range"
                     min="0"
-                    max="3000"
+                    max="10000"
                     value={priceRange[0]}
                     onChange={(e) => handlePriceRangeChange(e, 'min')}
                     className="w-full"
@@ -254,7 +193,7 @@ const ShopPage = () => {
                   <input
                     type="range"
                     min="0"
-                    max="3000"
+                    max="10000"
                     value={priceRange[1]}
                     onChange={(e) => handlePriceRangeChange(e, 'max')}
                     className="w-full"
@@ -286,9 +225,13 @@ const ShopPage = () => {
 
           {/* Product Grid */}
           <div className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <ProductCard {...product} key={product.id} />
+                
+
+              <ProductCard key={product.id} product={product} />
+
+
               ))}
             </div>
 
@@ -313,6 +256,7 @@ const ShopPage = () => {
                   <X className="w-6 h-6" />
                 </button>
               </div>
+              
               {/* Mobile Filters Content */}
               <div className="space-y-6">
                 {/* Price Range Filter */}
@@ -324,7 +268,7 @@ const ShopPage = () => {
                       <input
                         type="range"
                         min="0"
-                        max="3000"
+                        max="10000"
                         value={priceRange[0]}
                         onChange={(e) => handlePriceRangeChange(e, 'min')}
                         className="w-full"
@@ -336,7 +280,7 @@ const ShopPage = () => {
                       <input
                         type="range"
                         min="0"
-                        max="3000"
+                        max="10000"
                         value={priceRange[1]}
                         onChange={(e) => handlePriceRangeChange(e, 'max')}
                         className="w-full"

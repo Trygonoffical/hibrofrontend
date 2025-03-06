@@ -4,7 +4,7 @@ import { Dialog,DialogPanel, DialogTitle,Transition ,TransitionChild } from '@he
 import { XMarkIcon, ShoppingCartIcon , ShoppingBagIcon, TrashIcon} from '@heroicons/react/24/outline'
 import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
-
+import { getTokens } from '@/utils/cookies';
 
 const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
 
@@ -12,12 +12,17 @@ const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
     const [categories, setCategories] = useState(cats);
     const [parentCategories, setParentCategories] = useState(cats);
     const [loading, setLoading] = useState(false);
+
+    const { token } = getTokens();
+
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         image: null,
         parent: '',
-        is_active: true
+        is_active: true,
+        show_in_home: false // Added show_in_home field
     });
     const showSidebarStatus = () =>{
         setisSidebarVisible(true);
@@ -39,7 +44,6 @@ const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
                 console.log('Token from js-cookie:', Cookies.get('token'));
                 console.log('All cookies from js-cookie:', Cookies.get());
             
-                const token = Cookies.get('token');
                 if (!token) {
                     // Try alternate methods to get the token
                     const allCookies = document.cookie.split(';');
@@ -58,8 +62,8 @@ const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
                 });
 
                 try {
-                    const token = Cookies.get('token');
-                    console.log('token - ' , token)
+                    
+                   
                     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/`, {
                         method: 'POST',
                         headers: {
@@ -76,7 +80,8 @@ const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
                             description: '',
                             image: null,
                             parent: '',
-                            is_active: true
+                            is_active: true,
+                            show_in_home: false 
                         });
                         setRefreshKey(prev => prev + 1);
                         hideSidebarStatus();
@@ -199,6 +204,17 @@ const CreateCat = ({data = false , cats=[] , setRefreshKey}) => {
                                     />
                                     <label>Active</label>
                                 </div>
+
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.show_in_home}
+                                        onChange={(e) => setFormData({...formData, show_in_home: e.target.checked})}
+                                        className="mr-2"
+                                    />
+                                    <label>Show in Home Page</label>
+                                </div>
+                                
 
                                 <button
                                     type="submit"

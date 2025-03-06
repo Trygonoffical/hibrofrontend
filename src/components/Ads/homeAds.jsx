@@ -97,7 +97,7 @@ const HomeAds = () => {
             setLoading(true);
             
             // First fetch the multiple ads (MULTI type)
-            const multiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/advertisements/?type=MULTI&is_active=true`);
+            const multiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/advertisements/`);
             
             if (!multiResponse.ok) {
                 throw new Error(`Error fetching MULTI ads: ${multiResponse.status}`);
@@ -105,6 +105,10 @@ const HomeAds = () => {
             
             const multiData = await multiResponse.json();
             console.log('MULTI ads fetched:', multiData);
+            let multiads = multiData.filter(x => x.type == 'MULTI')
+            let singlads = multiData.filter(x => x.type == 'SINGLE')
+            console.log('MULTI ads fetched filter :', multiads);
+            console.log('singlads ads fetched singlads :', singlads);
             setMultipleAds(multiData);
             
             // Then fetch the single full-length ad (SINGLE type)

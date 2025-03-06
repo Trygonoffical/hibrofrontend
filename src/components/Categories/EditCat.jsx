@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { PencilIcon } from '@heroicons/react/20/solid';
 
+import { getTokens } from '@/utils/cookies';
 
 
 const EditCat = ({id={}, cats=[] , setRefreshKey}) => {
@@ -19,8 +20,11 @@ const EditCat = ({id={}, cats=[] , setRefreshKey}) => {
         description: '',
         image: null,
         parent: '',
-        is_active: true
+        is_active: true,
+        show_in_home: false // Added show_in_home field
+
     });
+    const { token } = getTokens();
 
   
 
@@ -35,86 +39,78 @@ const EditCat = ({id={}, cats=[] , setRefreshKey}) => {
 
       }
 
-          // Create category
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                setLoading(true);
+    // Create category
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
 
-                // Debug cookie access
-                console.log('All cookies:', document.cookie);
-                console.log('Token from js-cookie:', Cookies.get('token'));
-                console.log('All cookies from js-cookie:', Cookies.get());
+        // Debug cookie access
+        console.log('All cookies:', document.cookie);
+        console.log('Token from js-cookie:', Cookies.get('token'));
+        console.log('All cookies from js-cookie:', Cookies.get());
+    
+        
+        if (!token) {
+            // Try alternate methods to get the token
+            const allCookies = document.cookie.split(';');
+            const tokenCookie = allCookies.find(cookie => cookie.trim().startsWith('token='));
+            if (tokenCookie) {
+                const token = tokenCookie.split('=')[1];
+                console.log('Found token through alternate method:', token);
+            }
+        }
+
+        const form = new FormData();
+        Object.keys(formData).forEach(key => {
+            if (formData[key] !== null && formData[key] !== '') {
+                form.append(key, formData[key]);
+            }
+        });
+
+        try {
             
-                const token = Cookies.get('token');
-                if (!token) {
-                    // Try alternate methods to get the token
-                    const allCookies = document.cookie.split(';');
-                    const tokenCookie = allCookies.find(cookie => cookie.trim().startsWith('token='));
-                    if (tokenCookie) {
-                        const token = tokenCookie.split('=')[1];
-                        console.log('Found token through alternate method:', token);
-                    }
-                }
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: form,
+            });
 
-                const form = new FormData();
-                Object.keys(formData).forEach(key => {
-                    if (formData[key] !== null && formData[key] !== '') {
-                        form.append(key, formData[key]);
-                    }
+            if (response.ok) {
+                toast.success('Category created successfully');
+                // fetchCategories();
+                setFormData({
+                    name: '',
+                    description: '',
+                    image: null,
+                    parent: '',
+                    is_active: true,
+                    show_in_home: false // Added show_in_home field
+
                 });
+                setRefreshKey(prev => prev + 1);
+                hideSidebarStatus();
+                
+            } else {
+                toast.error('Error creating category');
+                console.log('error-' . error)
+            }
+        } catch (error) {
+            toast.error('Error creating category');
+            console.log('error-' . error)
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                try {
-                    const token = Cookies.get('token');
-                    console.log('token - ' , token)
-                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: form,
-                    });
-
-                    if (response.ok) {
-                        toast.success('Category created successfully');
-                        // fetchCategories();
-                        setFormData({
-                            name: '',
-                            description: '',
-                            image: null,
-                            parent: '',
-                            is_active: true
-                        });
-                        setRefreshKey(prev => prev + 1);
-                        hideSidebarStatus();
-                       
-                    } else {
-                        toast.error('Error creating category');
-                        console.log('error-' . error)
-                    }
-                } catch (error) {
-                    toast.error('Error creating category');
-                    console.log('error-' . error)
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            // const fetchCategoriesID = async ({id}) => {
-            //     try {
-            //         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`);
-            //         const data = await res.json();
-            //         // console.log('data - -= ' , data)
-            //         setCategories(data);
-            //     } catch (error) {
-            //         console.error('Error fetching categories:', error);
-            //     }
-            // };
-            useEffect(() => {
-                // fetchCategoriesID();
-                console.log('categories - ' , categories)
-               
-                setFormData(id)
-            }, [id]);
+    
+    useEffect(() => {
+        // fetchCategoriesID();
+        console.log('categories - ' , categories)
+        
+        setFormData(id)
+    }, [id]);
 
   return (
     <>
@@ -221,6 +217,16 @@ const EditCat = ({id={}, cats=[] , setRefreshKey}) => {
                                         className="mr-2"
                                     />
                                     <label>Active</label>
+                                </div>
+
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.show_in_home}
+                                        onChange={(e) => setFormData({...formData, show_in_home: e.target.checked})}
+                                        className="mr-2"
+                                    />
+                                    <label>Show in Home Page</label>
                                 </div>
 
                                 <button
