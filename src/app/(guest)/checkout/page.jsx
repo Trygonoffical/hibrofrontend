@@ -325,12 +325,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
 import Cookies from 'js-cookie';
-import UserArea from '@/components/Header/UserArea';
+// import UserArea from '@/components/Header/UserArea';
 import PayOrder from '@/components/PaymentButton/PayOrder';
 import { getTokens } from '@/utils/cookies';
 import AddressManager from '@/components/Profile/AddressManager';
 import PaymentHandler from '@/components/PaymentButton/PaymentHandler';
 import CustomerProfile from '@/components/Profile/CustomerProfile';
+import UserArea from '@/components/nav/UserArea';
 
 const CheckoutPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
