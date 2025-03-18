@@ -77,11 +77,11 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <a href="mailto:Email@emailaddress.com" className="block text-lg hover:text-green-600 transition-colors">
-                    Email@emailaddress.com
+                  info@hibroproduct.com
                   </a>
-                  <a href="mailto:Email@emailaddress.com" className="block text-lg hover:text-green-600 transition-colors">
+                  {/* <a href="mailto:Email@emailaddress.com" className="block text-lg hover:text-green-600 transition-colors">
                     Email@emailaddress.com
-                  </a>
+                  </a> */}
                 </div>
               </div>
 
@@ -92,11 +92,11 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <a href="tel:+919999999999" className="block text-lg hover:text-green-600 transition-colors">
-                    +91 9999999999
+                    +91 9971197735
                   </a>
-                  <a href="tel:+919999999999" className="block text-lg hover:text-green-600 transition-colors">
+                  {/* <a href="tel:+919999999999" className="block text-lg hover:text-green-600 transition-colors">
                     +91 9999999999
-                  </a>
+                  </a> */}
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <p className="text-lg">
-                    123 Business Street, New Delhi, India
+                  2060/62,1st Floor, Street No-06, Chuna Mandi, Paharganj , Central Delhi , Delhi, 110055
                   </p>
                 </div>
               </div>
